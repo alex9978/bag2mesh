@@ -1,0 +1,5 @@
+rosbags
+open3d
+numpy
+tqdm
+opencv-python
