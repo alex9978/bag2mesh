@@ -119,7 +119,7 @@ def extract_points_from_bag(bag_path, output_mesh, voxel_size=0.02, topic_name=N
                             keyframe_movement_threshold=0.05, keyframe_rotation_threshold=0.17,
                             outlier_nb_neighbors=20, outlier_std_ratio=2.0,
                             max_translation_jump=0.3, max_rotation_jump=0.5,
-                            linear_fit=True, remove_outliers=True, save_cloud_path=None):
+                            linear_fit=True, remove_outliers=True, save_cloud_path=None, max_depth=3.0):
     points_list = []
     colors_list = []
     normals_list = []
@@ -321,7 +321,7 @@ def extract_points_from_bag(bag_path, output_mesh, voxel_size=0.02, topic_name=N
                                 
                                 rgbd = o3d.geometry.RGBDImage.create_from_color_and_depth(
                                     last_color, last_depth, 
-                                    depth_scale=depth_scale, depth_trunc=3.0, convert_rgb_to_intensity=False
+                                    depth_scale=depth_scale, depth_trunc=max_depth, convert_rgb_to_intensity=False
                                 )
                                 pcd_frame = o3d.geometry.PointCloud.create_from_rgbd_image(rgbd, intrinsics)
                                 
@@ -585,6 +585,7 @@ if __name__ == "__main__":
     parser.add_argument("--voxel_size", type=float, default=0.02, 
                         help="Voxel size for downsampling (default: 0.02).")
     parser.add_argument("--depth_scale", type=float, default=None, help="Force depth scale (e.g. 1000.0)")
+    parser.add_argument("--max_depth", type=float, default=3.0, help="Max depth in meters. Points further than this are ignored. (default: 3.0)")
     parser.add_argument("--step", type=int, default=2, help="Process every Nth frame (default: 2)")
     parser.add_argument("--poisson_depth", type=int, default=11, help="Poisson reconstruction depth (default: 11). Lower for smoother mesh.")
     parser.add_argument("--density_threshold", type=float, default=0.1, help="Trim threshold (default: 0.1). Lower for fuller mesh, Higher for cleaner mesh.")
@@ -626,4 +627,4 @@ if __name__ == "__main__":
                             args.outlier_nb_neighbors, args.outlier_std_ratio,
                             args.max_translation_jump, args.max_rotation_jump,
                             linear_fit=not args.no_linear_fit, remove_outliers=not args.skip_outlier_removal,
-                            save_cloud_path=args.save_cloud)
+                            save_cloud_path=args.save_cloud, max_depth=args.max_depth)

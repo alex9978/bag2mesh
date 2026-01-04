@@ -45,6 +45,13 @@ For scanning a small object (e.g., a chair) with high detail:
 python bag2mesh.py object.bag chair.ply --voxel_size 0.01 --poisson_depth 11 --density_threshold 0.2
 ```
 
+### Rotating Object Scan (Turntable)
+If scanning an object on a turntable with a fixed camera, use `--max_depth` to remove the background:
+
+```bash
+python bag2mesh.py turntable.bag object.ply --max_depth 0.8
+```
+
 ### Fast Preview
 To quickly check the geometry without waiting for high-res processing:
 
