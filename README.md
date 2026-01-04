@@ -63,7 +63,7 @@ python bag2mesh.py large_scan.bag preview.ply --step 5 --voxel_size 0.05 --poiss
 
 ## ⚙️ Parameter Guide
 
-For a detailed explanation of all parameters, defaults, and tuning guides, please refer to the **[Wiki Documentation](bag2mesh.wiki/Home.md#usage--parameters)**.
+For a detailed explanation of all parameters, defaults, and tuning guides, please refer to the **[Wiki Documentation](https://github.com/alex9978/bag2mesh/wiki#usage--parameters)**.
 
 ## 🛠 Troubleshooting
 
