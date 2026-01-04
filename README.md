@@ -71,6 +71,7 @@ This tool is highly configurable. Below is a detailed explanation of all paramet
 | :--- | :--- | :--- | :--- |
 | `--voxel_size` | `0.02` | The resolution of the point cloud (in meters). | **Decrease (e.g., 0.01)** for small objects/high detail. **Increase (e.g., 0.05)** for large rooms or faster processing. Warning: Too small makes tracking harder. |
 | `--step` | `2` | Process every N-th frame. | **Increase (e.g., 5 or 10)** to speed up processing or if the camera moved very slowly. **Set to 1** for maximum data density. |
+| `--max_depth` | `3.0` | Max depth range (meters). Points further away are ignored. | **Decrease (e.g., 0.8)** to remove background/walls when scanning objects on a table. |
 | `--depth_scale` | `None` | Force a specific depth scale factor. | Use `1000.0` if your depth is in millimeters but the bag metadata is missing or wrong. |
 | `--topic` | `None` | Specific PointCloud2 topic to use. | Use this if the bag contains multiple point clouds and you want to select a specific one. |
 
