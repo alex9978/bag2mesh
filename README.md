@@ -1,4 +1,4 @@
-# bag2mesh 🎥 ➡️ 🧊
+# bag2mesh
 
 **bag2mesh** is a powerful, standalone Python tool designed to convert **ROS Bag files** (specifically from RGB-D cameras like Intel RealSense) into high-quality **3D Meshes (.ply)**.
 
