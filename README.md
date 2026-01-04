@@ -63,58 +63,7 @@ python bag2mesh.py large_scan.bag preview.ply --step 5 --voxel_size 0.05 --poiss
 
 ## ⚙️ Parameter Guide
 
-This tool is highly configurable. Below is a detailed explanation of all parameters, their defaults, and how to tune them.
-
-### 1. General Settings
-
-| Parameter | Default | Description | Tuning Guide |
-| :--- | :--- | :--- | :--- |
-| `--voxel_size` | `0.02` | The resolution of the point cloud (in meters). | **Decrease (e.g., 0.01)** for small objects/high detail. **Increase (e.g., 0.05)** for large rooms or faster processing. Warning: Too small makes tracking harder. |
-| `--step` | `2` | Process every N-th frame. | **Increase (e.g., 5 or 10)** to speed up processing or if the camera moved very slowly. **Set to 1** for maximum data density. |
-| `--max_depth` | `3.0` | Max depth range (meters). Points further away are ignored. | **Decrease (e.g., 0.8)** to remove background/walls when scanning objects on a table. |
-| `--depth_scale` | `None` | Force a specific depth scale factor. | Use `1000.0` if your depth is in millimeters but the bag metadata is missing or wrong. |
-| `--topic` | `None` | Specific PointCloud2 topic to use. | Use this if the bag contains multiple point clouds and you want to select a specific one. |
-
-### 2. Meshing Quality (Poisson)
-
-| Parameter | Default | Description | Tuning Guide |
-| :--- | :--- | :--- | :--- |
-| `--poisson_depth` | `11` | Depth of the Octree for reconstruction. Controls mesh resolution. | **Increase (12-13)** for extremely sharp details (requires more RAM). **Decrease (8-9)** for smoother, blob-like shapes or fast previews. |
-| `--density_threshold` | `0.1` | Trims vertices with low point support. | **Increase (0.2 - 0.5)** to remove "bubbles", filled holes, and artifacts (makes mesh "thinner"). **Decrease (0.0)** to fill holes and keep more geometry. |
-| `--no_linear_fit` | `False` | Disable linear interpolation in Poisson. | Use this flag if the mesh looks too noisy or "spiky". |
-
-### 3. Tracking & Stability (ICP)
-
-| Parameter | Default | Description | Tuning Guide |
-| :--- | :--- | :--- | :--- |
-| `--window_size` | `20` | Number of previous keyframes to align against (Local Map). | **Increase** for more stable tracking in feature-poor areas. **Decrease** for faster processing. |
-| `--coarse_threshold_multiplier` | `15.0` | Search radius for initial alignment (`voxel_size * multiplier`). | **Increase** if the camera moves very fast between frames. |
-| `--fine_threshold_multiplier` | `3.0` | Search radius for fine alignment. | **Decrease** for tighter alignment precision (requires good initial guess). |
-| `--colored_icp_min_fitness` | `0.5` | Min geometric fitness required to attempt Color ICP. | **Increase** if you see "No correspondences" errors or bad color alignment. |
-| `--colored_icp_search_ratio` | `2.0` | Search radius multiplier for Color ICP. | **Increase** to allow color alignment to search further away. |
-
-### 4. Keyframe Selection (Anti-Ghosting)
-
-| Parameter | Default | Description | Tuning Guide |
-| :--- | :--- | :--- | :--- |
-| `--keyframe_movement_threshold` | `0.05` | Min movement (meters) to save a frame. | **Increase (e.g., 0.10 - 0.20)** to reduce point overlap and ghosting. **Decrease** to create a denser cloud. |
-| `--keyframe_rotation_threshold` | `0.17` | Min rotation (radians) to save a frame. | **Increase** to save fewer frames during rotation. |
-
-### 5. Outlier Removal & Validation
-
-| Parameter | Default | Description | Tuning Guide |
-| :--- | :--- | :--- | :--- |
-| `--outlier_nb_neighbors` | `20` | Neighbors to check for noise filtering. | **Increase** for aggressive noise removal. |
-| `--outlier_std_ratio` | `2.0` | Standard deviation ratio for noise. | **Decrease (e.g., 1.0)** to remove more points (cleaner but might lose details). |
-| `--skip_outlier_removal` | `False` | Skip the final outlier removal step. | Use this flag if you want to keep all points, even noisy ones. |
-| `--max_translation_jump` | `0.3` | Max allowed movement (m) per frame. | **Increase** if you move the camera very fast. **Decrease** if tracking is getting lost/jumping. |
-| `--max_rotation_jump` | `0.5` | Max allowed rotation (rad) per frame. | **Increase** if you rotate the camera very fast. **Decrease** to prevent tracking errors during rotation. |
-
-### 6. Output Options
-
-| Parameter | Default | Description | Tuning Guide |
-| :--- | :--- | :--- | :--- |
-| `--save_cloud` | `None` | Path to save the raw point cloud (e.g., `cloud.ply`). | Use this if you want to inspect the raw point cloud before meshing. |
+For a detailed explanation of all parameters, defaults, and tuning guides, please refer to the **[Wiki Documentation](bag2mesh.wiki/Home.md#usage--parameters)**.
 
 ## 🛠 Troubleshooting
 
