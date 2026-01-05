@@ -225,6 +225,7 @@ def extract_points_from_bag(bag_path, output_mesh, voxel_size=0.02, topic_name=N
                                      break
                              except Exception as e:
                                  logger.warning(f"Failed to read Depth Units: {e}")
+                                 logger.info(f"{GREEN}Hint: Try manually setting --depth_scale (e.g., 1000.0).{RESET}")
                                  pass
 
                 connections = [c for c in reader.connections if c.topic in [depth_topic, color_topic, info_topic]]
@@ -247,6 +248,7 @@ def extract_points_from_bag(bag_path, output_mesh, voxel_size=0.02, topic_name=N
                 
                 if not intrinsics:
                     logger.warning("No CameraInfo found. Using default intrinsics.")
+                    logger.info(f"{GREEN}Hint: If the mesh looks distorted, check if your bag has camera_info topics.{RESET}")
                     intrinsics = o3d.camera.PinholeCameraIntrinsic(o3d.camera.PinholeCameraIntrinsicParameters.PrimeSenseDefault)
 
                 logger.info("Processing Image messages...")
@@ -439,6 +441,7 @@ def extract_points_from_bag(bag_path, output_mesh, voxel_size=0.02, topic_name=N
                                         
                                     except Exception as e:
                                         logger.warning(f"ICP Registration failed: {e}")
+                                        logger.info(f"{GREEN}Hint: Try increasing --coarse_threshold_multiplier to {coarse_threshold_multiplier * 2.0:.1f} or --voxel_size to {voxel_size * 1.5:.3f}.{RESET}")
                                         # Fallback to constant velocity on exception
                                         global_transform = global_transform @ last_relative_transform
                                         is_bad_registration = True
@@ -485,8 +488,11 @@ def extract_points_from_bag(bag_path, output_mesh, voxel_size=0.02, topic_name=N
 
         if skipped_frames_count > 0:
             logger.warning(f"Skipped {skipped_frames_count} frames due to low ICP fitness (tracking lost).")
+            logger.info(f"{GREEN}Hint: Try increasing --coarse_threshold_multiplier to {coarse_threshold_multiplier * 1.5:.1f} or --colored_icp_search_ratio to {colored_icp_search_ratio * 1.5:.1f}.{RESET}")
 
         if not points_list:
+            logger.warning("No points were accumulated from the bag.")
+            logger.info(f"{GREEN}Hint: Check if --max_depth ({max_depth}m) is too small, or if --depth_scale is correct.{RESET}")
             return None
 
         logger.info(f"Accumulated {processed_frames} frames.")
@@ -518,6 +524,7 @@ def process_and_mesh(pcd, output_path, voxel_size=0.02, poisson_depth=11, densit
     
     if len(pcd.points) == 0:
         logger.warning("Point cloud is empty.")
+        logger.info(f"{GREEN}Hint: Check --max_depth or ensure the bag has valid depth data.{RESET}")
         return
 
     # 1. Refine Point Cloud (No Downsampling)
@@ -546,6 +553,7 @@ def process_and_mesh(pcd, output_path, voxel_size=0.02, poisson_depth=11, densit
         mesh, densities = o3d.geometry.TriangleMesh.create_from_point_cloud_poisson(pcd, depth=poisson_depth, linear_fit=linear_fit)
     except Exception as e:
         logger.error(f"Poisson failed: {e}")
+        logger.info(f"{GREEN}Hint: Try reducing --poisson_depth to {max(5, poisson_depth - 1)}.{RESET}")
         return
 
     # 4. Clean up
